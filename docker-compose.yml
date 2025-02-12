@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  eureka_service:
+    build: .
+    container_name: eureka_service
+    ports:
+      - "8761:10000"
+    environment:
+      - SERVER_PORT=10000
+      - SPRING_APPLICATION_NAME=eureka_service
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
+      - EUREKA_CLIENT_FETCH_REGISTRY=false
+    command: ["java", "-jar", "target/eureka-service.jar"]
+
+  customer_service:
+    build: .
+    container_name: customer_service
+    ports:
+      - "8081:10000"
+    depends_on:
+      - eureka_service
+    environment:
+      - SERVER_PORT=10000
+      - SPRING_APPLICATION_NAME=customer_service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://your-db-host:3306/your-db
+      - SPRING_DATASOURCE_USERNAME=your-db-user
+      - SPRING_DATASOURCE_PASSWORD=your-db-pass
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka_service:10000/eureka/
+    command: ["java", "-jar", "target/customer-service.jar"]
+
+  api_gateway:
+    build: .
+    container_name: api_gateway
+    ports:
+      - "8000:10000"
+    depends_on:
+      - eureka_service
+      - customer_service
+    environment:
+      - SERVER_PORT=10000
+      - SPRING_APPLICATION_NAME=apigateway_service
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka_service:10000/eureka/
+      - SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED=true
+    command: ["java", "-jar", "target/api-gateway.jar"]
