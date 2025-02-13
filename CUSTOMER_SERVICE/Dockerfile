@@ -28,7 +28,7 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/target/customer-service.jar /usr/src/app/app.jar
 
 # Expose the port the application will run on
-EXPOSE 8081
+EXPOSE 10000
 
 # Command to run the Spring Boot application
 ENTRYPOINT ["java", "-Xmx512m", "-Xms256m", "-jar", "/usr/src/app/app.jar"]
