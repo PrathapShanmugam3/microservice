@@ -3,15 +3,15 @@ spring:
     gateway:
       routes:
         - id: customer_service_production
-          uri: https://customer-service-production.onrender.com
+          uri: https://customer-service-9pv4.onrender.com
           predicates:
             - Path=/customer/**
         - id: product_service_production
-          uri: https://product-service-production.onrender.com
+          uri: https://product-service-staging.onrender.com
           predicates:
             - Path=/product/**
 
 eureka:
   client:
     service-url:
-      defaultZone: https://eureka-service-production.onrender.com/eureka/
+      defaultZone: https://eureka-service-x628.onrender.com/eureka/
