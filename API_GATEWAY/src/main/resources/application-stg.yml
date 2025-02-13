@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: customer_service_staging
+          uri: https://customer-service-staging.onrender.com
+          predicates:
+            - Path=/customer/**
+        - id: product_service_staging
+          uri: https://product-service-staging.onrender.com
+          predicates:
+            - Path=/product/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: https://eureka-service-staging.onrender.com/eureka/
